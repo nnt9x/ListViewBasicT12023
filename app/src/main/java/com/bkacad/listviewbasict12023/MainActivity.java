@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -17,6 +18,10 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private ListView lvOs;
+    private Button btnAdd;
+
+    // Dialog
+    private AddNewOsDialog addNewOsDialog = null;
 
     // Data
     private List<String> dataSource;
@@ -28,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         lvOs = findViewById(R.id.lvOs);
+        btnAdd = findViewById(R.id.btnAdd);
 
         // Add data
         dataSource = new ArrayList<>();
@@ -68,6 +74,27 @@ public class MainActivity extends AppCompatActivity {
                         .create()
                         .show();
                 return false;
+            }
+        });
+
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Show dialog
+                if(addNewOsDialog == null){
+                    addNewOsDialog = new AddNewOsDialog(MainActivity.this) {
+                        @Override
+                        public void addNewOs(String newOs) {
+                            dataSource.add(newOs);
+                            arrayAdapter.notifyDataSetChanged();
+                            dismiss();
+                        }
+                    };
+                }
+                addNewOsDialog.setCancelable(false);
+                addNewOsDialog.show();
+
+                // Show dialog va nhap du lieu
             }
         });
     }
